@@ -1,0 +1,11 @@
+# built binary
+/reconciler
+/dist/
+
+# never commit real config — it holds the bot token
+/config.yaml
+/etc/
+
+# local scratch
+*.swp
+.DS_Store

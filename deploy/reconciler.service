@@ -1,0 +1,22 @@
+[Unit]
+Description=CloudPanel GitOps reconciler
+After=network-online.target nginx.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/reconciler --config /etc/reconciler/config.yaml
+
+# Root is required: clpctl's site:add:*, db:add and lets-encrypt:* commands
+# are not defined for any other caller, and `su - clp` yields the wrong set.
+User=root
+
+# Bounded so a hung build cannot wedge the timer forever.
+TimeoutStartSec=30min
+
+# systemd refuses to start a second instance of a oneshot that is already
+# running. That is what serialises the timer against the webhook trigger --
+# no extra locking needed on top of the flock the binary takes.
+
+[Install]
+WantedBy=multi-user.target

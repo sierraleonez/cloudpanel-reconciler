@@ -1,0 +1,15 @@
+[Unit]
+Description=Run the CloudPanel reconciler every two minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=2min
+
+# Jitter, so a fleet of boxes does not hit GitHub in lockstep.
+RandomizedDelaySec=15
+
+# Catch up after downtime instead of waiting for the next slot.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

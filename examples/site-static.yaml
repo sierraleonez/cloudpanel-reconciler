@@ -1,0 +1,15 @@
+# infra/sites/www.example.com.yaml
+domain: www.example.com
+siteUser: www-example
+type: static
+
+repo: git@github.com:almerandika/site.git
+ref: v0.9.0
+sshKey: /home/www-example/.ssh/deploy_key
+
+build:
+  - npm ci
+  - npm run build
+  - rm -rf ./* && mv dist/* .
+
+healthcheck: https://www.example.com/

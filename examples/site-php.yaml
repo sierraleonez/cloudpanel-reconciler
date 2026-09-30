@@ -1,0 +1,23 @@
+# infra/sites/shop.example.com.yaml
+domain: shop.example.com
+siteUser: shop-example
+type: php
+
+repo: git@github.com:almerandika/shop.git
+ref: v2.0.1
+sshKey: /home/shop-example/.ssh/deploy_key
+
+phpVersion: "8.3"
+vhostTemplate: Generic
+
+build:
+  - php8.3 /usr/local/bin/composer install --no-dev --optimize-autoloader
+
+release:
+  - php8.3 artisan migrate --force
+
+healthcheck: https://shop.example.com/up
+
+database:
+  name: shop_production
+  user: shop_production

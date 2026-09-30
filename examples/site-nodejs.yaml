@@ -1,0 +1,25 @@
+# infra/sites/app.example.com.yaml
+domain: app.example.com
+siteUser: app-example
+type: nodejs
+
+repo: git@github.com:almerandika/app.git
+ref: v1.4.2              # bump this line to promote; revert it to roll back
+sshKey: /home/app-example/.ssh/deploy_key
+
+nodeVersion: "20"
+appPort: 3001
+
+build:
+  - npm ci --omit=dev
+  - npm run build
+
+release:
+  - npm run migrate
+
+healthcheck: https://app.example.com/healthz
+systemdUnit: app@app-example
+
+database:
+  name: app_production
+  user: app_production

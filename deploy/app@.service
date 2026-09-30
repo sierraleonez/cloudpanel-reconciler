@@ -1,0 +1,28 @@
+# Template unit for nodejs sites: systemctl restart app@<siteUser>
+#
+# WorkingDirectory resolves the docroot symlink at start time, which is what
+# makes a restart pick up the newly activated release.
+[Unit]
+Description=Application for site user %i
+After=network-online.target
+
+[Service]
+Type=simple
+User=%i
+Group=%i
+WorkingDirectory=/home/%i/htdocs/REPLACE_WITH_DOMAIN
+
+# Maintained by hand on this host; never present in the infra repo.
+EnvironmentFile=-/etc/appenv/REPLACE_WITH_DOMAIN
+
+ExecStart=/usr/bin/env node server.js
+Restart=always
+RestartSec=3
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/home/%i
+
+[Install]
+WantedBy=multi-user.target
